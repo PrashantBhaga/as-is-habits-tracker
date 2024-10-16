@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2566">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Google Sheets Habit Tracker&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* ... (previous styles remain the same) ... */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#loginSection, #habitSection {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Google Sheets Habit Tracker&lt;/h2&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="loginSection"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="userIdInput" class="input-field" placeholder="Enter your user ID"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="login()"&gt;Login&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="habitSection"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="habitInput" class="input-field" placeholder="What was the habit?"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="helper-text"&gt;Does this behavior help me become the person I wish to be?&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="btn-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn btn-positive" onclick="setHabitType('+')"&gt;+&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn btn-neutral" onclick="setHabitType('=')"&gt;=&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn btn-negative" onclick="setHabitType('-')"&gt;-&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="cueInput" class="input-field" placeholder="What was the cue?"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="submitBtn" onclick="submitHabit()"&gt;Submit&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="viewHabits()"&gt;View My Habits&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="logout()"&gt;Logout&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="message"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="habitList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var habitType = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var userId = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbwYxKdZcnpxzDc4ginEQPkHKiCh6mQE-USEjedGoQjJI45fb0bZvumdPZkF91VR_Q7f/exec;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function login() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>userId = document.getElementById('userIdInput').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (userId) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('loginSection').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('habitSection').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('Please enter a user ID');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function logout() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>userId = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('loginSection').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('habitSection').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('userIdInput').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setHabitType(type) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>habitType = type;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var buttons = document.querySelectorAll('.btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (var i = 0; i &lt; buttons.length; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>buttons[i].style.opacity = '0.5';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>event.target.style.opacity = '1';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function submitHabit() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!habitType) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert("Please select a habit type (+, =, or -)");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var habit = document.getElementById('habitInput').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var cue = document.getElementById('cueInput').value;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var data = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>habit: habit,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>type: habitType,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cue: cue,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>userId: userId</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>fetch(GOOGLE_SCRIPT_URL, {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>body: JSON.stringify(data)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>})</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.then(response =&gt; response.json())</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.then(result =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (result.success) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('message').innerText = "Habit logged successfully!";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('message').innerText = "Error logging habit.";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>})</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.catch(error =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Error:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('message').innerText = "Error logging habit.";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Reset form</p>
+<p class="p1"><span class="Apple-converted-space">            </span>habitType = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('habitInput').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('cueInput').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var buttons = document.querySelectorAll('.btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (var i = 0; i &lt; buttons.length; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>buttons[i].style.opacity = '1';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function viewHabits() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>fetch(GOOGLE_SCRIPT_URL + '?userId=' + userId)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.then(response =&gt; response.json())</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.then(data =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var habitList = document.getElementById('habitList');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>habitList.innerHTML = '&lt;h3&gt;Your Habits:&lt;/h3&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>data.forEach(habit =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>habitList.innerHTML += `&lt;p&gt;${habit[0]}: ${habit[1]} (${habit[2]})&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>})</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.catch(error =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Error:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('message').innerText = "Error retrieving habits.";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
