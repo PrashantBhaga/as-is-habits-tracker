@@ -54,15 +54,14 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-        #submitBtn {
+        button {
             background-color: #2196F3;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
+            margin: 5px;
         }
         #message {
             margin-top: 20px;
@@ -146,10 +145,11 @@
             var cue = document.getElementById('cueInput').value;
 
             var data = {
+                userId: userId,
                 habit: habit,
                 type: habitType,
                 cue: cue,
-                userId: userId
+                timestamp: new Date().toISOString()
             };
 
             // Create a new script element
@@ -191,7 +191,7 @@
             var habitList = document.getElementById('habitList');
             habitList.innerHTML = '<h3>Your Habits:</h3>';
             data.forEach(function(habit) {
-                habitList.innerHTML += '<p>' + habit[0] + ': ' + habit[1] + ' (' + habit[2] + ')</p>';
+                habitList.innerHTML += '<p>' + habit[0] + ': ' + habit[1] + ' (' + habit[2] + ') - Cue: ' + habit[3] + '</p>';
             });
         }
 
